@@ -1,0 +1,33 @@
+## Doxygen input files
+*/Documentation/output/
+
+## Xcode 6 project files
+xcuserdata
+!xcshareddata
+*.xccheckout
+
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+## Xcode generated files
+DerivedData/
+build/
+*.[oa]
+
+*~.nib
+*~
+*(Autosaved).rtfd/
+
+*.moved-aside
+
+
+
