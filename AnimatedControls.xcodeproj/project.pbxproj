@@ -11,6 +11,8 @@
 		63EE648A1B3E176A0055B40C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63EE64891B3E176A0055B40C /* Images.xcassets */; };
 		63EE648D1B3E176A0055B40C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63EE648B1B3E176A0055B40C /* MainMenu.xib */; };
 		63EE64991B3E176A0055B40C /* AnimatedControlsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EE64981B3E176A0055B40C /* AnimatedControlsTests.swift */; };
+		63EE64A31B3E17FA0055B40C /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EE64A21B3E17FA0055B40C /* CircleView.swift */; };
+		63EE64A51B3E180F0055B40C /* CircleLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EE64A41B3E180F0055B40C /* CircleLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		63EE64921B3E176A0055B40C /* AnimatedControlsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimatedControlsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63EE64971B3E176A0055B40C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63EE64981B3E176A0055B40C /* AnimatedControlsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedControlsTests.swift; sourceTree = "<group>"; };
+		63EE64A21B3E17FA0055B40C /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
+		63EE64A41B3E180F0055B40C /* CircleLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				63EE64871B3E176A0055B40C /* AppDelegate.swift */,
+				63EE64A21B3E17FA0055B40C /* CircleView.swift */,
+				63EE64A41B3E180F0055B40C /* CircleLayer.swift */,
 				63EE64891B3E176A0055B40C /* Images.xcassets */,
 				63EE648B1B3E176A0055B40C /* MainMenu.xib */,
 				63EE64851B3E176A0055B40C /* Supporting Files */,
@@ -205,6 +211,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63EE64A31B3E17FA0055B40C /* CircleView.swift in Sources */,
+				63EE64A51B3E180F0055B40C /* CircleLayer.swift in Sources */,
 				63EE64881B3E176A0055B40C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

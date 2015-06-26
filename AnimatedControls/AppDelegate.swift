@@ -22,6 +22,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Insert code here to tear down your application
   }
 
+  
+  
+  func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+    return true
+  }
+  
+  
+  @IBOutlet weak var view: CircleView!
+  
+  @IBAction func button1(sender: AnyObject) {
+    view.createCircleLayer()
+  }
+  
+  @IBAction func button2(sender: AnyObject) {
+    view.increaseCircleRadius()
+  }
+  
+  @IBAction func button3(sender: AnyObject) {
+    view.adjustAngles()
+  }
 
 }
 
