@@ -15,6 +15,7 @@ class CircleView2 : NSView {
   var layer1 : CALayer
   var layer2 : CAShapeLayer
   var arcLayer : CAShapeLayer
+  var arcLayer2 : CircleLayer2
   
   var arcEndAngle : CGFloat
   
@@ -22,20 +23,6 @@ class CircleView2 : NSView {
   
   
   // MARK: - Initializers
-//  override init(frame frameRect: NSRect) {
-//    
-//    containerLayer = CALayer()
-//    containerLayer.name = "background"
-//    containerLayer.backgroundColor = NSColor.blackColor().CGColor
-//    
-//    layer1 = CALayer()
-//    layer1.name = "layer-1"
-//    
-//    super.init(frame: frameRect)
-//    
-//    self.layer = containerLayer
-//  }
-
   required init?(coder: NSCoder) {
     
     containerLayer = CALayer()
@@ -49,6 +36,9 @@ class CircleView2 : NSView {
     
     arcLayer = CAShapeLayer()
     arcLayer.name = "layer-shape_arc"
+    
+    arcLayer2 = CircleLayer2(radius: 15)
+    arcLayer2.name = "layer-circle_arc"
     
     arcEndAngle = π / 2.0
     
@@ -72,11 +62,13 @@ class CircleView2 : NSView {
     
     containerLayer.addSublayer(layer1)
     containerLayer.addSublayer(layer2)
-    containerLayer.addSublayer(arcLayer)
+//    containerLayer.addSublayer(arcLayer)
+    containerLayer.addSublayer(arcLayer2)
     
 //    layer1.delegate = self
 //    layer2.delegate = self
     arcLayer.delegate = self
+    arcLayer2.delegate = self
   }
   
   
@@ -85,6 +77,7 @@ class CircleView2 : NSView {
     drawLayer1()
     drawLayer2()
     drawArcLayer()
+    drawArcLayer2()
     
   }
   
@@ -97,6 +90,9 @@ class CircleView2 : NSView {
 //    arcLayer.lineWidth += 10.0
     arcEndAngle += π / 4.0
     arcLayer.setNeedsDisplay()
+    
+//    arcLayer2.radius += 20
+    arcLayer2.angleEnd += π / 4
   }
   
   func adjustAngles() {
@@ -156,6 +152,30 @@ class CircleView2 : NSView {
     arcLayer.strokeColor = NSColor.whiteColor().CGColor
   }
   
+  func drawArcLayer2() {
+    // Arc 2 - CircleLayer2
+    arcLayer2.frame = bounds
+    
+//    arcLayer2.path = CGPathCreateWithEllipseInRect(bounds, nil)
+    
+    var radius : CGFloat = 95.0
+    var startAngle = π / 4.0
+    var endAngle = arcEndAngle // π / 2.0
+    var clockwise : Bool = false
+    
+    println("animating between \(startAngle) and \(endAngle)")
+    
+    var aPath = CGPathCreateMutable()
+    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
+    CGPathMoveToPoint(aPath, nil, center.x, center.y)
+    CGPathAddArc(aPath, nil, center.x, center.y, radius, startAngle, endAngle, clockwise)
+    
+    arcLayer2.path = aPath
+  
+    arcLayer2.lineWidth = 2.0
+    arcLayer2.strokeColor = NSColor.orangeColor().CGColor
+  }
+  
   
   // MARK: - Individual Animations
   func animateLayer1(key: String!) -> CABasicAnimation {
@@ -212,19 +232,62 @@ class CircleView2 : NSView {
     return animation
   }
   
+  func animateArcLayer2(key: String!) -> CABasicAnimation {
+    
+    var animation = CABasicAnimation(keyPath: key)
+    
+    if arcLayer.presentationLayer()?.valueForKey(key) != nil {
+      animation.fromValue = arcLayer.presentationLayer().valueForKey(key)
+    }
+    else {
+      animation.fromValue = 0
+    }
+    
+    animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+    animation.duration = 1.0
+    
+    return animation
+  }
+  
   
   // MARK: - CALayerDelegate
-//  override func displayLayer(layer: CALayer!) {
-//    println("in delegate - displayLayer")
-////    super.displayLayer(layer)
+  override func displayLayer(layer: CALayer!) {
+    println("in delegate - displayLayer")
+//    super.displayLayer(layer)
 //    layer.displayIfNeeded()
-//  }
+    
+    if layer == arcLayer2 {
+      drawArcLayer2()
+//      arcLayer2.fillColor = NSColor.lightGrayColor().CGColor
+//      arcLayer2.strokeColor = NSColor.blackColor().CGColor
+//      arcLayer2.lineWidth = 1.0
+//      
+//      arcLayer2.shadowColor = NSColor.blackColor().CGColor
+//      arcLayer2.shadowOffset = CGSize(width: 0, height: 2)
+//      arcLayer2.shadowOpacity = 0.75
+//      arcLayer2.shadowRadius = 3.0
+//      arcLayer2.shadowPath = arcLayer2.path
+//      
+//      var gradientLayer = CAGradientLayer()
+//      gradientLayer.colors = [NSColor.whiteColor().CGColor, NSColor.lightGrayColor().CGColor]
+//      gradientLayer.frame = CGPathGetBoundingBox(arcLayer2.path)
+//      
+//      var maskLayer = CAShapeLayer()
+//      var translationT = CGAffineTransformMakeTranslation(-CGRectGetMinX(gradientLayer.frame), -CGRectGetMinY(gradientLayer.frame))
+//      maskLayer.path = CGPathCreateCopyByTransformingPath(arcLayer2.path, &translationT)
+//      
+//      gradientLayer.mask = maskLayer
+    }
+    
+  }
   
   override func drawLayer(layer: CALayer!, inContext ctx: CGContext!) {
-    println("in delegate - drawLayer")
     
     if layer == arcLayer {
       drawArcLayer()
+    }
+    else if layer == arcLayer2 {
+      println("missing?")
     }
     
     super.drawLayer(layer, inContext: ctx)
@@ -239,8 +302,10 @@ class CircleView2 : NSView {
       return animateLayer2(key)
     }
     else if layer == arcLayer {
-      println("the key for the arc is \(key)")
       return animateArcLayer(key)
+    }
+    else if layer == arcLayer2 {
+      return animateArcLayer2(key)
     }
     
     return super.actionForLayer(layer, forKey: key)
