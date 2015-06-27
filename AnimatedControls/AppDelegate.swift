@@ -54,7 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
   @IBAction func button3(sender: AnyObject) {
-//    view.adjustAngles()
+    view.adjustAngles()
   }
   
 }

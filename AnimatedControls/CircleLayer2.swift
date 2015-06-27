@@ -10,22 +10,26 @@ import Foundation
 import AppKit
 import QuartzCore
 
-class CircleLayer2 : CAShapeLayer {
+class CircleLayer2 : CALayer {
   
   @NSManaged var angleStart : CGFloat
   @NSManaged var angleEnd : CGFloat
+  @NSManaged var arcWidth : CGFloat
   
   var center : CGPoint = CGPoint(x: 0, y: 0)
   var radius : CGFloat = 1
   
+  let π = CGFloat(M_PI)
+  
   
   // MARK: - Initializers
   init(radius: CGFloat) {
-    
-//    self.center = center
+
     self.radius = radius
     
     super.init()
+    
+    arcWidth = 25
   }
   
   override init!(layer: AnyObject!) {
@@ -35,9 +39,10 @@ class CircleLayer2 : CAShapeLayer {
     if layer.isKindOfClass(CircleLayer2) {
       var otherLayer = layer as! CircleLayer2
       radius = otherLayer.radius
-//      center = otherLayer.center
+      center = otherLayer.center
       angleStart = otherLayer.angleStart
       angleEnd = otherLayer.angleEnd
+      arcWidth = otherLayer.arcWidth
     }
   }
 
@@ -51,92 +56,91 @@ class CircleLayer2 : CAShapeLayer {
   
   
   // MARK: - Drawing
-//  override func drawInContext(ctx: CGContext!) {
-//    println("drawing in circle layer")
-//    
-////    var radius : CGFloat = 95.0
-////    var startAngle = angleStart
-////    var endAngle = angleEnd
-////    var clockwise : Bool = false
-////    
-////    var aPath = CGPathCreateMutable()
-////    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
-////    CGPathMoveToPoint(aPath, nil, center.x, center.y)
-////    CGPathAddArc(aPath, nil, center.x, center.y, radius, startAngle, endAngle, clockwise)
-////    
-////    path = aPath
-////    
-////    lineWidth = 2.0
-////    strokeColor = NSColor.redColor().CGColor
-//    
-//    
-////    fillColor = NSColor.lightGrayColor().CGColor
-////    strokeColor = NSColor.blackColor().CGColor
-////    lineWidth = 1.0
-////    
-////    shadowColor = NSColor.blackColor().CGColor
-////    shadowOffset = CGSize(width: 0, height: 2)
-////    shadowOpacity = 0.75
-////    shadowRadius = 3.0
-////    shadowPath = path
-////    
-////    var gradientLayer = CAGradientLayer()
-////    gradientLayer.colors = [NSColor.whiteColor().CGColor, NSColor.lightGrayColor().CGColor]
-////    gradientLayer.frame = CGPathGetBoundingBox(path)
-////    
-////    var maskLayer = CAShapeLayer()
-////    var translationT = CGAffineTransformMakeTranslation(-CGRectGetMinX(gradientLayer.frame), -CGRectGetMinY(gradientLayer.frame))
-////    maskLayer.path = CGPathCreateCopyByTransformingPath(path, &translationT)
-////    
-////    gradientLayer.mask = maskLayer
-//  }
+  override func drawInContext(ctx: CGContext!) {
+    
+    var arcPath = createArc(customDegreesToRadians(angleStart), end: customDegreesToRadians(angleEnd), radius: radius, width: arcWidth)
+    
+    drawArcInContext(ctx, path: arcPath)
+    drawArcGradientInContext(ctx, path: arcPath, radius: radius, width: arcWidth)
+  }
   
-//  override func display() {
-//    println("called display")
-//    
-//    var radius : CGFloat = 95.0
-//    var startAngle = angleStart
-//    var endAngle = angleEnd
-//    var clockwise : Bool = false
-//    
-//    var aPath = CGPathCreateMutable()
-//    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
-//    CGPathMoveToPoint(aPath, nil, center.x, center.y)
-//    CGPathAddArc(aPath, nil, center.x, center.y, radius, startAngle, endAngle, clockwise)
-//    
-//    path = aPath
-//    
-//    lineWidth = 2.0
-//    strokeColor = NSColor.redColor().CGColor
-//  }
+  func createArc(start: CGFloat, end: CGFloat, radius: CGFloat, width: CGFloat) -> CGPathRef {
+    
+    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
+    var clockwise : Bool = true
+    
+    var arcPathStart = CGPathCreateMutable()
+    
+    CGPathAddArc(arcPathStart, nil, center.x, center.y, radius - width/2, start, end, clockwise)
+    
+    var arcPath = CGPathCreateCopyByStrokingPath(arcPathStart, nil, width, kCGLineCapButt, kCGLineJoinMiter, 10)
+    
+    return arcPath
+  }
+  
+  func drawArcInContext(c: CGContext!, path: CGPathRef) {
+    
+    CGContextSetStrokeColorWithColor(c, NSColor.blackColor().CGColor)
+    CGContextSetLineWidth(c, 1.0)
+    
+//    CGContextSetShadowWithColor(c, CGSize(width: 10, height: 5), 5, NSColor.blackColor().CGColor)
+    
+    CGContextAddPath(c, path)
+    
+    CGContextStrokePath(c)
+  }
+  
+  func drawArcGradientInContext(c: CGContext!, path: CGPathRef, radius: CGFloat, width: CGFloat) {
+    
+//    CGContextBeginTransparencyLayer(ctx, nil as CFDictionary!)
+    
+//    CGContextSaveGState(ctx)
+    
+    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
+    
+    var colorSpace = CGColorSpaceCreateDeviceRGB()
+    var colors = [NSColor.lightGrayColor().CGColor, NSColor.darkGrayColor().CGColor]
+    var locations : [CGFloat] = [0.0, 1.0]
+    var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
+    
+    var gradientDrawingOptions = CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation)
+    
+    CGContextAddPath(c, path)
+    
+    CGContextClip(c)
+    CGContextDrawRadialGradient(c, gradient, center, radius - width, center, radius, gradientDrawingOptions)
+    
+//    CGContextRestoreGState(ctx)
+    
+  }
   
   
   // MARK: - Animation
-//  func createAnimationForKey(key: String) -> CABasicAnimation {
-//    
-//    var animation = CABasicAnimation(keyPath: key)
-//    
-//    if presentationLayer()?.valueForKey(key) != nil {
-//      animation.fromValue = presentationLayer().valueForKey(key)
-//    }
-//    else {
-//      animation.fromValue = 0
-//    }
-//    
-//    animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-//    animation.duration = 0.5
-//    
-//    return animation
-//  }
+  func createCustomAnimationForKey(key: String) -> CABasicAnimation {
+    
+    var animation = CABasicAnimation(keyPath: key)
+    
+    if let previousValue = presentationLayer()?.valueForKey(key) as? CGFloat {
+      animation.fromValue = previousValue
+    }
+    else {
+      animation.fromValue = 0
+    }
+    
+    animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+    animation.duration = 0.5
+    
+    return animation
+  }
   
   
   // MARK: - Actions
 //  override func actionForKey(key: String!) -> CAAction! {
 //    
 //    if self.dynamicType.isCustomAnimatableProperty(key) {
-//      return createAnimationForKey(key)
+//      return createCustomAnimationForKey(key)
 //    }
-//    
+//
 //    return super.actionForKey(key)
 //  }
   
@@ -159,6 +163,17 @@ class CircleLayer2 : CAShapeLayer {
     }
     
     return false
+  }
+  
+  func customDegreesToRadians(degrees: CGFloat) -> CGFloat {
+    return degreesToRadians(customDegrees(degrees))
+  }
+  
+  func customDegrees(degrees: CGFloat) -> CGFloat {
+    return -degrees + 90
+  }
+  func degreesToRadians(degrees: CGFloat) -> CGFloat {
+    return degrees * π / 180
   }
   
 }
