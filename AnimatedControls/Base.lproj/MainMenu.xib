@@ -676,7 +676,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k5g-WV-6pl" customClass="CircleView" customModule="AnimatedControls" customModuleProvider="target">
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k5g-WV-6pl" customClass="CircleView2" customModule="AnimatedControls" customModuleProvider="target">
                         <rect key="frame" x="20" y="61" width="440" height="279"/>
                     </customView>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uVb-Jq-9Yx">

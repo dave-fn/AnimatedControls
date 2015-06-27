@@ -29,19 +29,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
   
-  @IBOutlet weak var view: CircleView!
+//  @IBOutlet weak var view: CircleView!
+//  
+//  @IBAction func button1(sender: AnyObject) {
+//    view.createCircleLayer()
+//  }
+//  
+//  @IBAction func button2(sender: AnyObject) {
+//    view.increaseCircleRadius()
+//  }
+//  
+//  @IBAction func button3(sender: AnyObject) {
+//    view.adjustAngles()
+//  }
+
+  @IBOutlet weak var view: CircleView2!
   
   @IBAction func button1(sender: AnyObject) {
     view.createCircleLayer()
   }
   
   @IBAction func button2(sender: AnyObject) {
-    view.increaseCircleRadius()
+    view.updateCircles()
   }
   
   @IBAction func button3(sender: AnyObject) {
-    view.adjustAngles()
+//    view.adjustAngles()
   }
-
+  
 }
 
