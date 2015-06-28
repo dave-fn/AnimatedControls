@@ -58,7 +58,10 @@ class CircleLayer2 : CALayer {
   // MARK: - Drawing
   override func drawInContext(ctx: CGContext!) {
     
-    var arcPath = createArc(customDegreesToRadians(angleStart), end: customDegreesToRadians(angleEnd), radius: radius, width: arcWidth)
+    println("drawing \(name)")
+    
+    var arcPath = createArc(translatedDegreesToRadians(angleStart), end: translatedDegreesToRadians(angleEnd),
+      radius: radius, width: arcWidth)
     
     drawArcInContext(ctx, path: arcPath)
     drawArcGradientInContext(ctx, path: arcPath, radius: radius, width: arcWidth)
@@ -165,12 +168,12 @@ class CircleLayer2 : CALayer {
     return false
   }
   
-  func customDegreesToRadians(degrees: CGFloat) -> CGFloat {
-    return degreesToRadians(customDegrees(degrees))
+  func translatedDegreesToRadians(degrees: CGFloat) -> CGFloat {
+    return degreesToRadians(translatedDegrees(degrees))
   }
   
-  func customDegrees(degrees: CGFloat) -> CGFloat {
-    return -degrees + 90
+  func translatedDegrees(degrees: CGFloat) -> CGFloat {
+    return 90 - degrees
   }
   func degreesToRadians(degrees: CGFloat) -> CGFloat {
     return degrees * π / 180

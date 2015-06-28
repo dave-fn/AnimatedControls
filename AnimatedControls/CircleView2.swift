@@ -120,7 +120,7 @@ class CircleView2 : NSView {
     arcLayer2.arcWidth += 10
 //    arcLayer2.radius += 10
     
-    arcWidths = [ 1, 5, 1 ]
+    arcWidths = [ 1, 2, 1 ]
   }
   
   func adjustAngles() {
@@ -332,11 +332,10 @@ class CircleView2 : NSView {
     if contains(arcLayers as [CALayer], layer) {
       var aLayer = layer as! CircleLayer2
       
-      println("cercas mijo")
-      
       if aLayer.dynamicType.isCustomAnimatableProperty(key) {
         var animation = aLayer.createCustomAnimationForKey(key)
-        animation.delegate = self
+//        animation.delegate = self
+//        animation.setValue(aLayer, forKey: "layer")
         
         return animation
       }
@@ -353,23 +352,35 @@ class CircleView2 : NSView {
   
   
   // MARK: - CAAnimationDelegate
-  override func animationDidStart(anim: CAAnimation!) {
-    println("delegate - animationDidStart")
-  }
-  
-  override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
-    println("delegate - animationDidStop")
-  }
+//  override func animationDidStart(anim: CAAnimation!) {
+//    println("delegate - animationDidStart")
+//  }
+//  
+//  override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+//    println("delegate - animationDidStop")
+//    
+//    if let layer = anim.valueForKey("layer") as? CircleLayer2 {
+////      || anim == arcLayers[0].animationForKey("angleEnd") {
+//      
+//      for i in 0..<arcLayers.count - 1 {
+//        if layer == arcLayers[i] {
+//          println("ended \(i), start \(i+1)")
+//          refreshArcAtPosition(i+1)
+//        }
+//      }
+//    }
+//    
+//  }
   
   
   // MARK: - Update
   func refreshArcs() {
-    let sumOfValues = CGFloat(arcWidths.reduce(0, combine: +))
     
     if arcWidths.count > arcLayers.count {
       for i in 0..<arcWidths.count - arcLayers.count {
         var newLayer = CircleLayer2(radius: 100)
         newLayer.frame = bounds
+        newLayer.name = "layer \(i)"
         
         newLayer.delegate = self
         
@@ -387,20 +398,52 @@ class CircleView2 : NSView {
       }
     }
     
+//    refreshArcAtPosition(0)
+    
+    let sumOfValues = CGFloat(arcWidths.reduce(0, combine: +))
+    
+//    CATransaction.begin()
+    
     var startOfAngle = CGFloat(0)
     for i in 0..<arcLayers.count {
       var angleWidth = 360 * CGFloat(arcWidths[i]) / sumOfValues
       
+//      var anAnimation = arcLayers[i].createCustomAnimationForKey("angleStart")
+//      anAnimation.toValue = startOfAngle
+//      arcLayers[i].addAnimation(anAnimation, forKey: "rocoAnimation")
+//      anAnimation.timeOffset = CFTimeInterval(i) * 1.0
+//      anAnimation.duration = 1.0
+//      
+//      anAnimation = arcLayers[i].createCustomAnimationForKey("angleEnd")
+//      anAnimation.toValue = startOfAngle + angleWidth
+//      arcLayers[i].addAnimation(anAnimation, forKey: "rocoAnimation")
+//      anAnimation.timeOffset = CFTimeInterval(i) * 1.0
+//      anAnimation.duration = 1.0
+      
       arcLayers[i].angleStart = startOfAngle
       arcLayers[i].angleEnd = startOfAngle + angleWidth
-      
+
       startOfAngle += angleWidth
     }
+    
+//    CATransaction.commit()
     
   }
   
 //  func refreshArcAtPosition(index: Int) {
+//    let sumOfValues = CGFloat(arcWidths.reduce(0, combine: +))
 //    
+//    var startOfAngle = CGFloat(0)
+//    for i in 0..<arcLayers.count {
+//      var angleWidth = 360 * CGFloat(arcWidths[i]) / sumOfValues
+//      
+//      if i == index {
+//        arcLayers[i].angleStart = startOfAngle
+//        arcLayers[i].angleEnd = startOfAngle + angleWidth
+//      }
+//      
+//      startOfAngle += angleWidth
+//    }
 //  }
   
   
