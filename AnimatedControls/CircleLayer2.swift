@@ -19,6 +19,9 @@ class CircleLayer2 : CALayer {
   var center : CGPoint = CGPoint(x: 0, y: 0)
   var radius : CGFloat = 1
   
+  var colorStart = NSColor.lightGrayColor().CGColor
+  var colorEnd = NSColor.blackColor().CGColor
+  
   let π = CGFloat(M_PI)
   
   
@@ -29,7 +32,7 @@ class CircleLayer2 : CALayer {
     
     super.init()
     
-    arcWidth = 25
+    arcWidth = 40
   }
   
   override init!(layer: AnyObject!) {
@@ -38,11 +41,14 @@ class CircleLayer2 : CALayer {
     
     if layer.isKindOfClass(CircleLayer2) {
       var otherLayer = layer as! CircleLayer2
+      
       radius = otherLayer.radius
       center = otherLayer.center
       angleStart = otherLayer.angleStart
       angleEnd = otherLayer.angleEnd
       arcWidth = otherLayer.arcWidth
+      colorStart = otherLayer.colorStart
+      colorEnd = otherLayer.colorEnd
     }
   }
 
@@ -58,14 +64,16 @@ class CircleLayer2 : CALayer {
   // MARK: - Drawing
   override func drawInContext(ctx: CGContext!) {
     
-    println("drawing \(name)")
+//    println("drawing \(name)")
     
     var arcPath = createArc(translatedDegreesToRadians(angleStart), end: translatedDegreesToRadians(angleEnd),
       radius: radius, width: arcWidth)
+    var arcGradient = createGradient(colorStart, color2: colorEnd)
     
     drawArcInContext(ctx, path: arcPath)
-    drawArcGradientInContext(ctx, path: arcPath, radius: radius, width: arcWidth)
+    drawArcGradientInContext(ctx, path: arcPath, gradient: arcGradient, radius: radius, width: arcWidth)
   }
+  
   
   func createArc(start: CGFloat, end: CGFloat, radius: CGFloat, width: CGFloat) -> CGPathRef {
     
@@ -81,6 +89,7 @@ class CircleLayer2 : CALayer {
     return arcPath
   }
   
+  
   func drawArcInContext(c: CGContext!, path: CGPathRef) {
     
     CGContextSetStrokeColorWithColor(c, NSColor.blackColor().CGColor)
@@ -93,18 +102,26 @@ class CircleLayer2 : CALayer {
     CGContextStrokePath(c)
   }
   
-  func drawArcGradientInContext(c: CGContext!, path: CGPathRef, radius: CGFloat, width: CGFloat) {
+  
+  func createGradient(color1: CGColor, color2: CGColor) -> CGGradientRef {
+    
+    var colorSpace = CGColorSpaceCreateDeviceRGB()
+    var colors = [color1, color2]
+    var locations : [CGFloat] = [1.0, 0.0]
+    
+    var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
+    
+    return gradient
+  }
+  
+  
+  func drawArcGradientInContext(c: CGContext!, path: CGPathRef, gradient: CGGradient, radius: CGFloat, width: CGFloat) {
     
 //    CGContextBeginTransparencyLayer(ctx, nil as CFDictionary!)
     
 //    CGContextSaveGState(ctx)
     
     var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
-    
-    var colorSpace = CGColorSpaceCreateDeviceRGB()
-    var colors = [NSColor.lightGrayColor().CGColor, NSColor.darkGrayColor().CGColor]
-    var locations : [CGFloat] = [0.0, 1.0]
-    var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
     
     var gradientDrawingOptions = CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation)
     
@@ -167,6 +184,7 @@ class CircleLayer2 : CALayer {
     
     return false
   }
+  
   
   func translatedDegreesToRadians(degrees: CGFloat) -> CGFloat {
     return degreesToRadians(translatedDegrees(degrees))
