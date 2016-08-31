@@ -36,7 +36,7 @@ class CircleLayer : CAShapeLayer {
     super.init(coder: aDecoder)!
   }
   
-  override init!(layer: AnyObject) {
+  override init(layer: AnyObject) {
     print("init withLayer");
     
     super.init(layer: layer)
@@ -55,19 +55,19 @@ class CircleLayer : CAShapeLayer {
   // MARK: - Drawing
   func drawArc(ctx: CGContext!) {
     
-    var frame = self.bounds
-    var center = CGPointMake(NSMidX(frame), NSMidY(frame))
-    var clockwise : Int32 = 1
+    let frame = self.bounds
+    let center = CGPointMake(NSMidX(frame), NSMidY(frame))
+    let clockwise : Int32 = 1
     
-    var angleStartRadians = degreesToRadians(angleStart)
-    var angleEndRadians = degreesToRadians(angleEnd)
+    let angleStartRadians = degreesToRadians(angleStart)
+    let angleEndRadians = degreesToRadians(angleEnd)
     
     CGContextBeginPath(ctx)
     
     CGContextAddArc(ctx, center.x, center.y, radius, angleStartRadians, angleEndRadians, clockwise)
     
     CGContextSetLineWidth(ctx, ringWidth)
-    CGContextSetLineCap(ctx, kCGLineCapButt)
+    CGContextSetLineCap(ctx, CGLineCap.Butt)
     //    CGContextSetLineJoin(ctx, kCGLineJoinMiter)
     CGContextReplacePathWithStrokedPath(ctx)
     arcPath = CGContextCopyPath(ctx)
@@ -94,15 +94,15 @@ class CircleLayer : CAShapeLayer {
     
     CGContextSaveGState(ctx)
     
-    var frame = self.bounds
-    var center = CGPointMake(NSMidX(frame), NSMidY(frame))
+    let frame = self.bounds
+    let center = CGPointMake(NSMidX(frame), NSMidY(frame))
     
-    var colorSpace = CGColorSpaceCreateDeviceRGB()
-    var colors = [NSColor.lightGrayColor().CGColor, NSColor.darkGrayColor().CGColor]
-    var locations : [CGFloat] = [0.0, 1.0]
-    var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
+    let colorSpace = CGColorSpaceCreateDeviceRGB()
+    let colors = [NSColor.lightGrayColor().CGColor, NSColor.darkGrayColor().CGColor]
+    let locations : [CGFloat] = [0.0, 1.0]
+    let gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
     
-    var gradientDrawingOptions = CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation)
+    let gradientDrawingOptions = CGGradientDrawingOptions(arrayLiteral: CGGradientDrawingOptions.DrawsAfterEndLocation)
     
     CGContextClip(ctx)
     CGContextDrawRadialGradient(ctx, gradient, center, radius - ringWidth/2, center, radius + ringWidth/2, gradientDrawingOptions)
@@ -123,19 +123,19 @@ class CircleLayer : CAShapeLayer {
   func drawAll(ctx: CGContext!) {
     
     // ARC
-    var frame = self.bounds
-    var center = CGPointMake(NSMidX(frame), NSMidY(frame))
-    var clockwise : Int32 = 1
+    let frame = self.bounds
+    let center = CGPointMake(NSMidX(frame), NSMidY(frame))
+    let clockwise : Int32 = 1
     
-    var angleStartRadians = degreesToRadians(angleStart)
-    var angleEndRadians = degreesToRadians(angleEnd)
+    let angleStartRadians = degreesToRadians(angleStart)
+    let angleEndRadians = degreesToRadians(angleEnd)
     
     CGContextBeginPath(ctx)
     
     CGContextAddArc(ctx, center.x, center.y, radius, angleStartRadians, angleEndRadians, clockwise)
     
     CGContextSetLineWidth(ctx, ringWidth)
-    CGContextSetLineCap(ctx, kCGLineCapButt)
+    CGContextSetLineCap(ctx, CGLineCap.Butt)
     CGContextReplacePathWithStrokedPath(ctx)
     arcPath = CGContextCopyPath(ctx)
     
@@ -147,12 +147,12 @@ class CircleLayer : CAShapeLayer {
     
     CGContextSaveGState(ctx)
     
-    var colorSpace = CGColorSpaceCreateDeviceRGB()
-    var colors = [NSColor.lightGrayColor().CGColor, NSColor.darkGrayColor().CGColor]
-    var locations : [CGFloat] = [0.0, 1.0]
-    var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
+    let colorSpace = CGColorSpaceCreateDeviceRGB()
+    let colors = [NSColor.lightGrayColor().CGColor, NSColor.darkGrayColor().CGColor]
+    let locations : [CGFloat] = [0.0, 1.0]
+    let gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
     
-    var gradientDrawingOptions = CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation)
+    let gradientDrawingOptions = CGGradientDrawingOptions(arrayLiteral: CGGradientDrawingOptions.DrawsAfterEndLocation)
     
     CGContextClip(ctx)
     CGContextDrawRadialGradient(ctx, gradient, center, radius - ringWidth/2, center, radius + ringWidth/2, gradientDrawingOptions)
@@ -161,7 +161,7 @@ class CircleLayer : CAShapeLayer {
     
     CGContextAddPath(ctx, arcPath)
     CGContextSetLineWidth(ctx, outlineWidth)
-    CGContextSetLineJoin(ctx, kCGLineJoinMiter)
+    CGContextSetLineJoin(ctx, CGLineJoin.Miter)
     CGContextSetStrokeColorWithColor(ctx, NSColor.lightGrayColor().CGColor)
     CGContextStrokePath(ctx)
     CGContextEndTransparencyLayer(ctx)
@@ -176,7 +176,7 @@ class CircleLayer : CAShapeLayer {
     
     CGContextAddPath(ctx, arcPath)
     CGContextSetLineWidth(ctx, outlineWidth)
-    CGContextSetLineJoin(ctx, kCGLineJoinMiter)
+    CGContextSetLineJoin(ctx, CGLineJoin.Miter)
     CGContextSetStrokeColorWithColor(ctx, NSColor.lightGrayColor().CGColor)
     CGContextStrokePath(ctx)
     CGContextEndTransparencyLayer(ctx)
@@ -202,7 +202,7 @@ class CircleLayer : CAShapeLayer {
     let animation = CABasicAnimation(keyPath: key)
     
     if presentationLayer()?.valueForKey(key) != nil {
-      animation.fromValue = presentationLayer().valueForKey(key)
+      animation.fromValue = presentationLayer()!.valueForKey(key)
     }
     else {
       animation.fromValue = 0

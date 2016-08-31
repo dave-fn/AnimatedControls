@@ -35,8 +35,7 @@ class CircleLayer2 : CALayer {
     arcWidth = 40
   }
   
-  override init!(layer: AnyObject) {
-    
+  override init(layer: AnyObject) {
     super.init(layer: layer)
     
     if layer.isKindOfClass(CircleLayer2) {
@@ -77,16 +76,16 @@ class CircleLayer2 : CALayer {
   
   func createArc(start: CGFloat, end: CGFloat, radius: CGFloat, width: CGFloat) -> CGPathRef {
     
-    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
-    var clockwise : Bool = true
+    let center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
+    let clockwise : Bool = true
     
-    var arcPathStart = CGPathCreateMutable()
+    let arcPathStart = CGPathCreateMutable()
     
     CGPathAddArc(arcPathStart, nil, center.x, center.y, radius - width/2, start, end, clockwise)
     
-    var arcPath = CGPathCreateCopyByStrokingPath(arcPathStart, nil, width, kCGLineCapButt, kCGLineJoinMiter, 10)
+    let arcPath = CGPathCreateCopyByStrokingPath(arcPathStart, nil, width, CGLineCap.Butt, CGLineJoin.Miter, 10)
     
-    return arcPath
+    return arcPath!
   }
   
   
@@ -121,9 +120,9 @@ class CircleLayer2 : CALayer {
     
 //    CGContextSaveGState(ctx)
     
-    var center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
+    let center = CGPoint(x: NSMidX(self.bounds), y: NSMidY(self.bounds))
     
-    var gradientDrawingOptions = CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation)
+    let gradientDrawingOptions = CGGradientDrawingOptions(arrayLiteral: CGGradientDrawingOptions.DrawsAfterEndLocation)
     
     CGContextAddPath(c, path)
     
