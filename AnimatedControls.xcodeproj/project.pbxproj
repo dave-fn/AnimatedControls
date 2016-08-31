@@ -178,6 +178,7 @@
 		63EE647A1B3E176A0055B40C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = David;
 				TargetAttributes = {
@@ -428,6 +429,7 @@
 				63EE649E1B3E176A0055B40C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		63EE649F1B3E176A0055B40C /* Build configuration list for PBXNativeTarget "AnimatedControlsTests" */ = {
 			isa = XCConfigurationList;
@@ -436,6 +438,7 @@
 				63EE64A11B3E176A0055B40C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
