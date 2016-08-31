@@ -33,16 +33,16 @@ class CircleLayer : CAShapeLayer {
   }
   
   required init(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+    super.init(coder: aDecoder)!
   }
   
-  override init!(layer: AnyObject!) {
-    println("init withLayer");
+  override init!(layer: AnyObject) {
+    print("init withLayer");
     
     super.init(layer: layer)
     
     if layer.isKindOfClass(CircleLayer) {
-      var otherLayer = layer as! CircleLayer
+      let otherLayer = layer as! CircleLayer
       radius = otherLayer.radius
       angleStart = otherLayer.angleStart
       angleEnd = otherLayer.angleEnd
@@ -169,7 +169,7 @@ class CircleLayer : CAShapeLayer {
   }
   
   
-  override func drawInContext(ctx: CGContext!) {
+  override func drawInContext(ctx: CGContext) {
     drawArc(ctx)
     drawArcShadow(ctx)
     drawArcGradient(ctx)
@@ -186,7 +186,7 @@ class CircleLayer : CAShapeLayer {
   
   
   // MARK: - Actions
-  override func actionForKey(key: String!) -> CAAction! {
+  override func actionForKey(key: String) -> CAAction? {
     
     if key == "radius" || key == "angleStart" || key == "angleEnd" {
       return createAnimationForKey(key)
@@ -199,7 +199,7 @@ class CircleLayer : CAShapeLayer {
   // MARK: - Animations
   func createAnimationForKey(key: String) -> CABasicAnimation {
     
-    var animation = CABasicAnimation(keyPath: key)
+    let animation = CABasicAnimation(keyPath: key)
     
     if presentationLayer()?.valueForKey(key) != nil {
       animation.fromValue = presentationLayer().valueForKey(key)
@@ -215,7 +215,7 @@ class CircleLayer : CAShapeLayer {
   }
   
   
-  override class func needsDisplayForKey(key: String!) -> Bool {
+  override class func needsDisplayForKey(key: String) -> Bool {
     
     if key == "radius" || key == "angleStart" || key == "angleEnd" {
       return true

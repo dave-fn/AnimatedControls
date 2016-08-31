@@ -83,13 +83,13 @@ class CircleView2 : NSView {
   
 
   // MARK: - CALayerDelegate
-  override func actionForLayer(layer: CALayer!, forKey key: String!) -> CAAction! {
+  override func actionForLayer(layer: CALayer, forKey key: String) -> CAAction? {
     
     if contains(arcLayers as [CALayer], layer) {
-      var aLayer = layer as! CircleLayer2
+      let aLayer = layer as! CircleLayer2
       
       if aLayer.dynamicType.isCustomAnimatableProperty(key) {
-        var animation = aLayer.createCustomAnimationForKey(key)
+        let animation = aLayer.createCustomAnimationForKey(key)
 //        animation.delegate = self
 //        animation.setValue(aLayer, forKey: "layer")
         
@@ -128,7 +128,7 @@ class CircleView2 : NSView {
     
     if arcWidths.count > arcLayers.count {
       for i in arcLayers.count..<arcWidths.count {
-        var newLayer = CircleLayer2(radius: 100)
+        let newLayer = CircleLayer2(radius: 100)
         newLayer.frame = bounds
         newLayer.name = "layer \(i)"
         
@@ -144,8 +144,8 @@ class CircleView2 : NSView {
     }
     
     else if arcWidths.count < arcLayers.count {
-      for i in 0..<arcLayers.count - arcWidths.count {
-        var unneededLayer = arcLayers.removeLast()
+      for _ in 0..<arcLayers.count - arcWidths.count {
+        let unneededLayer = arcLayers.removeLast()
         
         unneededLayer.removeFromSuperlayer()
       }
@@ -159,7 +159,7 @@ class CircleView2 : NSView {
     
     var startOfAngle = CGFloat(0)
     for i in 0..<arcLayers.count {
-      var angleWidth = 360 * CGFloat(arcWidths[i]) / sumOfValues
+      let angleWidth = 360 * CGFloat(arcWidths[i]) / sumOfValues
       
 //      var anAnimation = arcLayers[i].createCustomAnimationForKey("angleStart")
 //      anAnimation.toValue = startOfAngle

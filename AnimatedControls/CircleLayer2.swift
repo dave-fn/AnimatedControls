@@ -35,12 +35,12 @@ class CircleLayer2 : CALayer {
     arcWidth = 40
   }
   
-  override init!(layer: AnyObject!) {
+  override init!(layer: AnyObject) {
     
     super.init(layer: layer)
     
     if layer.isKindOfClass(CircleLayer2) {
-      var otherLayer = layer as! CircleLayer2
+      let otherLayer = layer as! CircleLayer2
       
       radius = otherLayer.radius
       center = otherLayer.center
@@ -62,13 +62,13 @@ class CircleLayer2 : CALayer {
   
   
   // MARK: - Drawing
-  override func drawInContext(ctx: CGContext!) {
+  override func drawInContext(ctx: CGContext) {
     
 //    println("drawing \(name)")
     
-    var arcPath = createArc(translatedDegreesToRadians(angleStart), end: translatedDegreesToRadians(angleEnd),
+    let arcPath = createArc(translatedDegreesToRadians(angleStart), end: translatedDegreesToRadians(angleEnd),
       radius: radius, width: arcWidth)
-    var arcGradient = createGradient(colorStart, color2: colorEnd)
+    let arcGradient = createGradient(colorStart, color2: colorEnd)
     
     drawArcInContext(ctx, path: arcPath)
     drawArcGradientInContext(ctx, path: arcPath, gradient: arcGradient, radius: radius, width: arcWidth)
@@ -105,13 +105,13 @@ class CircleLayer2 : CALayer {
   
   func createGradient(color1: CGColor, color2: CGColor) -> CGGradientRef {
     
-    var colorSpace = CGColorSpaceCreateDeviceRGB()
-    var colors = [color1, color2]
-    var locations : [CGFloat] = [1.0, 0.0]
+    let colorSpace = CGColorSpaceCreateDeviceRGB()
+    let colors = [color1, color2]
+    let locations : [CGFloat] = [1.0, 0.0]
     
-    var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
+    let gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
     
-    return gradient
+    return gradient!
   }
   
   
@@ -138,7 +138,7 @@ class CircleLayer2 : CALayer {
   // MARK: - Animation
   func createCustomAnimationForKey(key: String) -> CABasicAnimation {
     
-    var animation = CABasicAnimation(keyPath: key)
+    let animation = CABasicAnimation(keyPath: key)
     
     if let previousValue = presentationLayer()?.valueForKey(key) as? CGFloat {
       animation.fromValue = previousValue
@@ -165,7 +165,7 @@ class CircleLayer2 : CALayer {
 //  }
   
   
-  override class func needsDisplayForKey(key: String!) -> Bool {
+  override class func needsDisplayForKey(key: String) -> Bool {
     
     if isCustomAnimatableProperty(key) {
       return true

@@ -44,14 +44,14 @@ class CircleView: NSView {
     // MARK: CALayer . setFrame
     // If the frame is not set, then drawInContext is not called
     
-    self.layer?.addSublayer(circleLayer)
+    self.layer?.addSublayer(circleLayer!)
     
     
     circleLayer = CircleLayer(radius: CGFloat(45), start: 180, end: 135)
     circleLayer?.name = "circle-2"
     circleLayer?.frame = CGRectInset(self.bounds, 10, 10)
     
-    self.layer?.addSublayer(circleLayer)
+    self.layer?.addSublayer(circleLayer!)
   }
   
   
@@ -77,7 +77,7 @@ class CircleView: NSView {
   
   
   func containerLayer() -> CALayer {
-    var layer = CALayer()
+    let layer = CALayer()
     layer.name = "container"
     layer.backgroundColor = NSColor.blackColor().CGColor
     
