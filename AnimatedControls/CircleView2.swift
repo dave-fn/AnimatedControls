@@ -85,7 +85,7 @@ class CircleView2 : NSView {
   // MARK: - CALayerDelegate
   override func actionForLayer(layer: CALayer, forKey key: String) -> CAAction? {
     
-    if contains(arcLayers as [CALayer], layer) {
+    if (arcLayers as [CALayer]).contains(layer) {
       let aLayer = layer as! CircleLayer2
       
       if aLayer.dynamicType.isCustomAnimatableProperty(key) {
